@@ -27,26 +27,38 @@ public class JournalEntryService {
     }
 
     public JournalEntry getEntryById(String id) {
-        return journalEntryRepository.findById(id).orElseThrow(() -> new RuntimeException("Entry not found"));
+        try {
+            return journalEntryRepository.findById(id).orElseThrow(() -> new RuntimeException("Entry not found"));
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting entry: " + e.getMessage());
+        }
     }
 
     public JournalEntry updateById(String id, JournalEntry updatedEntry) {
-        JournalEntry entry = journalEntryRepository.findById(id)
-                .orElse(null);
-        if (entry != null) {
-            entry.setTitle(updatedEntry.getTitle());
-            entry.setContent(updatedEntry.getContent());
-            entry.setDate(updatedEntry.getDate());
-        } else {
-            entry = updatedEntry;
-            entry.setId(id);
+        try {
+            JournalEntry entry = journalEntryRepository.findById(id)
+                    .orElse(null);
+            if (entry != null) {
+                entry.setTitle(updatedEntry.getTitle());
+                entry.setContent(updatedEntry.getContent());
+                entry.setDate(updatedEntry.getDate());
+            } else {
+                entry = updatedEntry;
+                entry.setId(id);
+            }
+            journalEntryRepository.save(entry);
+            return entry;
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating entry: " + e.getMessage());
         }
-        journalEntryRepository.save(entry);
-        return entry;
     }
 
     public void deleteEntry(String id) {
-        journalEntryRepository.deleteById(id);
+        try {
+            journalEntryRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting entry: " + e.getMessage());
+        }
     }
 
 }
