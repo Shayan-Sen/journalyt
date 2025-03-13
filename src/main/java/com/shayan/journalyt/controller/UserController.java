@@ -42,14 +42,14 @@ public class UserController {
             userService.saveUser(user);
             return ResponseEntity.status(CREATED).body(new ApiResponse(user, "Created new User"));
         } catch (Exception e) {
-            return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(null, "Failed to create user"));
+            return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(null, "Failed to create user: "+ e.getMessage()));
         }
     }
 
-    @PutMapping
-    public ResponseEntity<ApiResponse> updateUser(@RequestBody User user) {
+    @PutMapping("/{username}")
+    public ResponseEntity<ApiResponse> updateUser(@RequestBody User user,@PathVariable String username) {
         try {
-            User userInDb = userService.findByUsername(user.getUsername());
+            User userInDb = userService.findByUsername(username);
             if (userInDb != null) {
                 userInDb.setUsername(user.getUsername());
                 userInDb.setPassword(user.getPassword());
