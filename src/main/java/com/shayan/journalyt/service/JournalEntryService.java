@@ -15,7 +15,11 @@ public class JournalEntryService {
     private JournalEntryRepository journalEntryRepository;
 
     public void saveEntry(JournalEntry journalEntry) {
-        journalEntryRepository.save(journalEntry);
+        try {
+            journalEntryRepository.save(journalEntry);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving entry: " + e.getMessage());
+        }
     }
 
     public List<JournalEntry> getAll() {
