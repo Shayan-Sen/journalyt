@@ -43,7 +43,7 @@ public class JournalEntryController {
         return ResponseEntity.ok(new ApiResponse(entries, "Successfully Retrieved All Journal Entries of " + username));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<ApiResponse> getJournalEntrybyId(@PathVariable ObjectId id) {
         try {
             JournalEntry entry = journalEntryService.getEntryById(id);
@@ -58,7 +58,7 @@ public class JournalEntryController {
     @PostMapping("/user/{username}")
     public ResponseEntity<ApiResponse> createEntry(@RequestBody JournalEntry journalEntry,@PathVariable String username) {
         try {
-            journalEntryService.saveEntry(journalEntry);
+            journalEntryService.saveEntry(journalEntry,username);
 
             return ResponseEntity.status(CREATED).body(new ApiResponse(journalEntry, "New Journal Entry Created"));
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class JournalEntryController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/id/{id}")
     public ResponseEntity<ApiResponse> updateEntry(@PathVariable ObjectId id, @RequestBody JournalEntry journalEntry) {
         try {
             JournalEntry updatedEntry = journalEntryService.updateById(id, journalEntry);
@@ -78,10 +78,10 @@ public class JournalEntryController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteEntry(@PathVariable ObjectId id) {
+    @DeleteMapping("/user/{username}/id/{id}")
+    public ResponseEntity<ApiResponse> deleteEntry(@PathVariable ObjectId id,@PathVariable String username) {
         try {
-            journalEntryService.deleteEntry(id);
+            journalEntryService.deleteEntry(id,username);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(null, e.getMessage()));

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.shayan.journalyt.entity.JournalEntry;
+import com.shayan.journalyt.entity.User;
 import com.shayan.journalyt.repository.JournalEntryRepository;
 
 @Service
@@ -15,9 +16,15 @@ public class JournalEntryService {
     @Autowired
     private JournalEntryRepository journalEntryRepository;
 
-    public void saveEntry(JournalEntry journalEntry) {
+    @Autowired
+    private UserService userService;
+
+    public void saveEntry(JournalEntry journalEntry, String username) {
         try {
-            journalEntryRepository.save(journalEntry);
+            User user = userService.findByUsername(username);
+            JournalEntry saved = journalEntryRepository.save(journalEntry);
+            user.getJournalEntries().add(saved);
+            userService.saveUser(user);
         } catch (Exception e) {
             throw new RuntimeException("Error saving entry: " + e.getMessage());
         }
@@ -54,9 +61,12 @@ public class JournalEntryService {
         }
     }
 
-    public void deleteEntry(ObjectId id) {
+    public void deleteEntry(ObjectId id, String username) {
         try {
+            User user = userService.findByUsername(username);
+            user.getJournalEntries().removeIf(x -> x.getId().equals(id));
             journalEntryRepository.deleteById(id);
+            userService.saveUser(user);
         } catch (Exception e) {
             throw new RuntimeException("Error deleting entry: " + e.getMessage());
         }
