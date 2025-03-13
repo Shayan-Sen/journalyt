@@ -2,6 +2,7 @@ package com.shayan.journalyt.service;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(String id) {
+    public User getUserById(ObjectId id) {
         try {
             return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         } catch (RuntimeException e) {
@@ -42,7 +43,7 @@ public class UserService {
         }
     }
 
-    public void deleteUser(String id) {
+    public void deleteUser(ObjectId id) {
         try {
             userRepository.deleteById(id);
         } catch (Exception e) {

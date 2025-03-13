@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.HttpStatus.*;
 
+import org.bson.types.ObjectId;
+
 import com.shayan.journalyt.entity.User;
 import com.shayan.journalyt.service.UserService;
 
@@ -28,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getUserById(@PathVariable String id) {
+    public ResponseEntity<ApiResponse> getUserById(@PathVariable ObjectId id) {
         try {
             return ResponseEntity.ok(new ApiResponse(userService.getUserById(id), "Succesfully retrieved user"));
         } catch (Exception e) {
@@ -64,7 +66,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable String id) {
+    public ResponseEntity<ApiResponse> deleteUser(@PathVariable ObjectId id) {
         try {
             userService.deleteUser(id);
             return ResponseEntity.noContent().build();

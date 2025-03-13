@@ -2,6 +2,7 @@ package com.shayan.journalyt.service;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class JournalEntryService {
         return journalEntryRepository.findAll();
     }
 
-    public JournalEntry getEntryById(String id) {
+    public JournalEntry getEntryById(ObjectId id) {
         try {
             return journalEntryRepository.findById(id).orElseThrow(() -> new RuntimeException("Entry not found"));
         } catch (Exception e) {
@@ -34,7 +35,7 @@ public class JournalEntryService {
         }
     }
 
-    public JournalEntry updateById(String id, JournalEntry updatedEntry) {
+    public JournalEntry updateById(ObjectId id, JournalEntry updatedEntry) {
         try {
             JournalEntry entry = journalEntryRepository.findById(id)
                     .orElse(null);
@@ -53,7 +54,7 @@ public class JournalEntryService {
         }
     }
 
-    public void deleteEntry(String id) {
+    public void deleteEntry(ObjectId id) {
         try {
             journalEntryRepository.deleteById(id);
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.shayan.journalyt.controller;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.springframework.http.HttpStatus.*;
@@ -43,7 +44,7 @@ public class JournalEntryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse> getJournalEntrybyId(@PathVariable String id) {
+    public ResponseEntity<ApiResponse> getJournalEntrybyId(@PathVariable ObjectId id) {
         try {
             JournalEntry entry = journalEntryService.getEntryById(id);
 
@@ -54,8 +55,8 @@ public class JournalEntryController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<ApiResponse> createEntry(@RequestBody JournalEntry journalEntry) {
+    @PostMapping("/user/{username}")
+    public ResponseEntity<ApiResponse> createEntry(@RequestBody JournalEntry journalEntry,@PathVariable String username) {
         try {
             journalEntryService.saveEntry(journalEntry);
 
@@ -66,7 +67,7 @@ public class JournalEntryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse> updateEntry(@PathVariable String id, @RequestBody JournalEntry journalEntry) {
+    public ResponseEntity<ApiResponse> updateEntry(@PathVariable ObjectId id, @RequestBody JournalEntry journalEntry) {
         try {
             JournalEntry updatedEntry = journalEntryService.updateById(id, journalEntry);
 
@@ -78,7 +79,7 @@ public class JournalEntryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteEntry(@PathVariable String id) {
+    public ResponseEntity<ApiResponse> deleteEntry(@PathVariable ObjectId id) {
         try {
             journalEntryService.deleteEntry(id);
             return ResponseEntity.noContent().build();

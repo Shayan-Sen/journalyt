@@ -2,8 +2,8 @@ package com.shayan.journalyt.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -16,7 +16,7 @@ import lombok.NonNull;
 @Data
 public class User {
     @Id
-    private String id = UUID.randomUUID().toString();
+    private ObjectId id;
 
     @Indexed(unique = true)
     @NonNull
