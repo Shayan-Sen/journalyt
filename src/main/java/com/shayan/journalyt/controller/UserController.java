@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,6 +43,23 @@ public class UserController {
             return ResponseEntity.status(CREATED).body(new ApiResponse(user, "Created new User"));
         } catch (Exception e) {
             return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(null, "Failed to create user"));
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<ApiResponse> updateUser(@RequestBody User user) {
+        try {
+            User userInDb = userService.findByUsername(user.getUsername());
+            if (userInDb != null) {
+                userInDb.setUsername(user.getUsername());
+                userInDb.setPassword(user.getPassword());
+                userService.saveUser(userInDb);
+                return ResponseEntity.ok(new ApiResponse(null, "User updated successfully"));
+            }else{
+                throw new Exception("User not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(null,e.getMessage()));
         }
     }
 
