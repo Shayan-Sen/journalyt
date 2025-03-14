@@ -9,6 +9,10 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.shayan.journalyt.serializers.JournalEntryIdListSerializer;
+import com.shayan.journalyt.serializers.ObjectIdSerializer;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +24,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class User {
     @Id
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
 
     @Indexed(unique = true)
@@ -30,5 +35,6 @@ public class User {
     private String password;
     
     @DBRef
+    @JsonSerialize(using = JournalEntryIdListSerializer.class)
     private List<JournalEntry> journalEntries = new ArrayList<>();
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shayan.journalyt.entity.JournalEntry;
 import com.shayan.journalyt.entity.User;
@@ -19,6 +20,7 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
+    @Transactional
     public void saveEntry(JournalEntry journalEntry, String username) {
         try {
             User user = userService.findByUsername(username);
@@ -61,7 +63,6 @@ public class JournalEntryService {
                 entry.setDate(updatedEntry.getDate());
             } else {
                 entry = updatedEntry;
-                entry.setId(id);
             }
             journalEntryRepository.save(entry);
             return entry;

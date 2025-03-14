@@ -35,10 +35,14 @@ public class JournalEntryController {
     @GetMapping("/user/{username}")
     public ResponseEntity<ApiResponse> getAllJournalEntriesOfUser(@PathVariable String username) {
 
-        User user = userService.findByUsername(username);
-        List<JournalEntry> entries = user.getJournalEntries();
+        try {
+            User user = userService.findByUsername(username);
+            List<JournalEntry> entries = user.getJournalEntries();
 
-        return ResponseEntity.ok(new ApiResponse(entries, "Successfully Retrieved All Journal Entries of " + username));
+            return ResponseEntity.ok(new ApiResponse(entries, "Successfully Retrieved All Journal Entries of " + username));
+        } catch (Exception e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(null, e.getMessage()));
+        }
     }
 
     @GetMapping("/user/{username}/id/{id}")
