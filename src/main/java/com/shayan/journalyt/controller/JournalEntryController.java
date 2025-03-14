@@ -29,8 +29,6 @@ public class JournalEntryController {
     @Autowired
     private JournalEntryService journalEntryService;
 
-
-
     @Autowired
     private UserService userService;
 
@@ -43,10 +41,10 @@ public class JournalEntryController {
         return ResponseEntity.ok(new ApiResponse(entries, "Successfully Retrieved All Journal Entries of " + username));
     }
 
-    @GetMapping("/id/{id}")
-    public ResponseEntity<ApiResponse> getJournalEntrybyId(@PathVariable ObjectId id) {
+    @GetMapping("/user/{username}/id/{id}")
+    public ResponseEntity<ApiResponse> getJournalEntrybyId(@PathVariable ObjectId id,@PathVariable String username) {
         try {
-            JournalEntry entry = journalEntryService.getEntryById(id);
+            JournalEntry entry = journalEntryService.getEntryById(id,username);
 
             return ResponseEntity
                     .ok(new ApiResponse(entry, "Successfully Retrieved Journal Entry"));
@@ -56,9 +54,10 @@ public class JournalEntryController {
     }
 
     @PostMapping("/user/{username}")
-    public ResponseEntity<ApiResponse> createEntry(@RequestBody JournalEntry journalEntry,@PathVariable String username) {
+    public ResponseEntity<ApiResponse> createEntry(@RequestBody JournalEntry journalEntry,
+            @PathVariable String username) {
         try {
-            journalEntryService.saveEntry(journalEntry,username);
+            journalEntryService.saveEntry(journalEntry, username);
 
             return ResponseEntity.status(CREATED).body(new ApiResponse(journalEntry, "New Journal Entry Created"));
         } catch (Exception e) {
@@ -66,10 +65,13 @@ public class JournalEntryController {
         }
     }
 
-    @PutMapping("/id/{id}")
-    public ResponseEntity<ApiResponse> updateEntry(@PathVariable ObjectId id, @RequestBody JournalEntry journalEntry) {
+    @PutMapping("/user/{username}/id/{id}")
+    public ResponseEntity<ApiResponse> updateEntry(
+            @PathVariable ObjectId id,
+            @RequestBody JournalEntry journalEntry,
+            @PathVariable String username) {
         try {
-            JournalEntry updatedEntry = journalEntryService.updateById(id, journalEntry);
+            JournalEntry updatedEntry = journalEntryService.updateById(id, journalEntry,username);
 
             return ResponseEntity.status(ACCEPTED)
                     .body(new ApiResponse(updatedEntry, "Changed Journal Entry with id:" + id));
@@ -79,9 +81,9 @@ public class JournalEntryController {
     }
 
     @DeleteMapping("/user/{username}/id/{id}")
-    public ResponseEntity<ApiResponse> deleteEntry(@PathVariable ObjectId id,@PathVariable String username) {
+    public ResponseEntity<ApiResponse> deleteEntry(@PathVariable ObjectId id, @PathVariable String username) {
         try {
-            journalEntryService.deleteEntry(id,username);
+            journalEntryService.deleteEntry(id, username);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(null, e.getMessage()));

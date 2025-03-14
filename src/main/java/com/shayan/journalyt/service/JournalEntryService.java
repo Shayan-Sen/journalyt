@@ -34,18 +34,27 @@ public class JournalEntryService {
         return journalEntryRepository.findAll();
     }
 
-    public JournalEntry getEntryById(ObjectId id) {
+    public JournalEntry getEntryById(ObjectId id, String username) {
         try {
-            return journalEntryRepository.findById(id).orElseThrow(() -> new RuntimeException("Entry not found"));
+            User user = userService.findByUsername(username);
+            JournalEntry entry = journalEntryRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Entry not found"));
+            if (user.getJournalEntries().contains(entry)) {
+                return entry;
+            } else {
+                throw new RuntimeException("Entry not found");
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error getting entry: " + e.getMessage());
         }
     }
 
-    public JournalEntry updateById(ObjectId id, JournalEntry updatedEntry) {
+    public JournalEntry updateById(ObjectId id, JournalEntry updatedEntry, String username) {
         try {
-            JournalEntry entry = journalEntryRepository.findById(id)
+            User user = userService.findByUsername(username);
+            JournalEntry journalEntry = journalEntryRepository.findById(id)
                     .orElse(null);
+            JournalEntry entry = user.getJournalEntries().contains(journalEntry)?journalEntry:null;
             if (entry != null) {
                 entry.setTitle(updatedEntry.getTitle());
                 entry.setContent(updatedEntry.getContent());
