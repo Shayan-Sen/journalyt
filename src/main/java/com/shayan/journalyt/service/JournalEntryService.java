@@ -51,6 +51,7 @@ public class JournalEntryService {
         }
     }
 
+    @Transactional
     public JournalEntry updateById(ObjectId id, JournalEntry updatedEntry, String username) {
         try {
             User user = userService.findByUsername(username);
@@ -71,6 +72,7 @@ public class JournalEntryService {
         }
     }
 
+    @Transactional
     public void deleteEntry(ObjectId id, String username) {
         try {
             User user = userService.findByUsername(username);

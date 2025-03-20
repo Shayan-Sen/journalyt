@@ -37,4 +37,6 @@ public class User {
     @DBRef
     @JsonSerialize(using = JournalEntryIdListSerializer.class)
     private List<JournalEntry> journalEntries = new ArrayList<>();
+    
+    private List<String> roles;
 }
