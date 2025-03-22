@@ -20,6 +20,7 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
+// not implemented yet
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String username) {
         try {
@@ -32,25 +33,25 @@ public class JournalEntryService {
         }
     }
 
+// not implemented yet
     public List<JournalEntry> getAll() {
         return journalEntryRepository.findAll();
     }
 
+// journal
     public JournalEntry getEntryById(ObjectId id, String username) {
         try {
             User user = userService.findByUsername(username);
             JournalEntry entry = journalEntryRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Entry not found"));
-            if (user.getJournalEntries().contains(entry)) {
-                return entry;
-            } else {
-                throw new RuntimeException("Entry not found");
-            }
+            if (user.getJournalEntries().contains(entry)) return entry;
+            else throw new RuntimeException("Entry not found");
         } catch (Exception e) {
             throw new RuntimeException("Error getting entry: " + e.getMessage());
         }
     }
 
+// not implemented yet
     @Transactional
     public JournalEntry updateById(ObjectId id, JournalEntry updatedEntry, String username) {
         try {
@@ -72,6 +73,7 @@ public class JournalEntryService {
         }
     }
 
+// not implemented yet
     @Transactional
     public void deleteEntry(ObjectId id, String username) {
         try {

@@ -20,6 +20,7 @@ public class UserService {
 
     private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
+// user
     @Transactional
     public void saveUser(User user) {
         try {
@@ -29,6 +30,7 @@ public class UserService {
         }
     }
 
+// public
     @Transactional
     public void saveNewUser(User user) {
         try {
@@ -40,6 +42,7 @@ public class UserService {
         }
     }
 
+// admin
     @Transactional
     public void saveAdmin(User user) {
         try {
@@ -51,10 +54,12 @@ public class UserService {
         }
     }
 
+// admin
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
+// admin
     public User getUserById(ObjectId id) {
         try {
             return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
@@ -63,6 +68,7 @@ public class UserService {
         }
     }
 
+// journal 
     public User findByUsername(String username) {
         try {
             return userRepository.findByUsername(username);
@@ -71,6 +77,7 @@ public class UserService {
         }
     }
 
+// not implemented yet
     @Transactional
     public void deleteUser(ObjectId id) {
         try {
@@ -80,6 +87,7 @@ public class UserService {
         }
     }
 
+// user
     @Transactional
     public void deleteUserByUsername(String username) {
         try {

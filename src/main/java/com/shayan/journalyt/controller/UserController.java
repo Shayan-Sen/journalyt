@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,10 +27,11 @@ public class UserController {
     public ResponseEntity<ApiResponse> updateUser(@RequestBody User user) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
         User userInDb = userService.findByUsername(username);
         userInDb.setUsername(user.getUsername());
-        userInDb.setPassword(user.getPassword());
-        userService.saveNewUser(userInDb);
+        userInDb.setPassword(encoder.encode(user.getPassword()));
+        userService.saveUser(userInDb);
         return ResponseEntity.noContent().build();
     }
 
