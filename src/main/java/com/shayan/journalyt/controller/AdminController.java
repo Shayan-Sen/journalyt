@@ -6,6 +6,8 @@ import static org.springframework.http.HttpStatus.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +28,16 @@ public class AdminController {
             return ResponseEntity.ok(new ApiResponse( users, "Users retrieved successfully"));
         }else{
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(null,"No users found"));
+        }
+    }
+
+    @PostMapping("/create-admin")
+    public ResponseEntity<ApiResponse> createAdmin(@RequestBody User user) {
+        try {
+            userService.saveAdmin(user);
+            return ResponseEntity.status(CREATED).body(new ApiResponse(user,"Added new admin"));
+        } catch (Exception e) {
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(null,e.getMessage()));
         }
     }
 }

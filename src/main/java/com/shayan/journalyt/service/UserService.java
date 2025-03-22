@@ -40,6 +40,17 @@ public class UserService {
         }
     }
 
+    @Transactional
+    public void saveAdmin(User user) {
+        try {
+            user.setPassword(encoder.encode(user.getPassword()));
+            user.setRoles(List.of("USER","ADMIN"));
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save user: " + e.getMessage());
+        }
+    }
+
     public List<User> getAll() {
         return userRepository.findAll();
     }
