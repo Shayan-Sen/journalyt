@@ -1,9 +1,12 @@
 package com.shayan.journalyt.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.shayan.journalyt.entity.User;
@@ -15,8 +18,20 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
+
     public void saveUser(User user) {
         try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save user: " + e.getMessage());
+        }
+    }
+
+    public void saveNewUser(User user) {
+        try {
+            user.setPassword(encoder.encode(user.getPassword()));
+            user.setRoles(Arrays.asList("USER"));
             userRepository.save(user);
         } catch (Exception e) {
             throw new RuntimeException("Failed to save user: " + e.getMessage());
@@ -35,7 +50,7 @@ public class UserService {
         }
     }
 
-    public User findByUsername(String username){
+    public User findByUsername(String username) {
         try {
             return userRepository.findByUsername(username);
         } catch (Exception e) {
