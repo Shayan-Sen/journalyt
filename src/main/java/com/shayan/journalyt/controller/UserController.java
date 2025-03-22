@@ -21,23 +21,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // @GetMapping
-    // public ResponseEntity<ApiResponse> getAll() {
-    // return ResponseEntity.ok(new ApiResponse(userService.getAll(), "Succesfully
-    // retrieved all users"));
-    // }
-
-    // @GetMapping("/{id}")
-    // public ResponseEntity<ApiResponse> getUserById(@PathVariable ObjectId id) {
-    // try {
-    // return ResponseEntity.ok(new ApiResponse(userService.getUserById(id),
-    // "Succesfully retrieved user"));
-    // } catch (Exception e) {
-    // return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(null, "User not
-    // found"));
-    // }
-    // }
-
     @PutMapping
     public ResponseEntity<ApiResponse> updateUser(@RequestBody User user) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
