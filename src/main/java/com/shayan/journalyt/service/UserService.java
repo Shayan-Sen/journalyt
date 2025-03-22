@@ -64,4 +64,12 @@ public class UserService {
             throw new RuntimeException("Failed to delete user: " + e.getMessage());
         }
     }
+
+    public void deleteUserByUsername(String username) {
+        try {
+            userRepository.deleteByUsername(username);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete user: " + e.getMessage());
+        }
+    }
 }
