@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.shayan.journalyt.entity.JournalEntry;
 import com.shayan.journalyt.entity.User;
+import com.shayan.journalyt.service.JournalEntryService;
 import com.shayan.journalyt.service.UserService;
 
 @RestController
@@ -23,6 +25,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JournalEntryService journalEntryService;
 
     @GetMapping("/all-users")
     public ResponseEntity<ApiResponse> getAllUsers() {
@@ -41,6 +46,16 @@ public class AdminController {
                     "Succesfully retrieved user"));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(null, "User not found"));
+        }
+    }
+
+    @GetMapping("/all-entries")
+    public ResponseEntity<ApiResponse> getAllEntries(){
+        List<JournalEntry> entries = journalEntryService.getAll();
+        if (entries != null && !entries.isEmpty()) {
+            return ResponseEntity.ok(new ApiResponse(entries, "Entries retrieved successfully"));
+        }else{
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(null, "No entries found"));
         }
     }
 

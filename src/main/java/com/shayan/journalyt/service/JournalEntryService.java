@@ -20,7 +20,7 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
-// not implemented yet
+// journal
     @Transactional
     public void saveEntry(JournalEntry journalEntry, String username) {
         try {
@@ -33,7 +33,7 @@ public class JournalEntryService {
         }
     }
 
-// not implemented yet
+// admin
     public List<JournalEntry> getAll() {
         return journalEntryRepository.findAll();
     }
@@ -51,7 +51,7 @@ public class JournalEntryService {
         }
     }
 
-// not implemented yet
+// journal
     @Transactional
     public JournalEntry updateById(ObjectId id, JournalEntry updatedEntry, String username) {
         try {
@@ -73,7 +73,7 @@ public class JournalEntryService {
         }
     }
 
-// not implemented yet
+// journal
     @Transactional
     public void deleteEntry(ObjectId id, String username) {
         try {
