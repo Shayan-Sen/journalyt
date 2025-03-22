@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shayan.journalyt.entity.User;
 import com.shayan.journalyt.repository.UserRepository;
@@ -19,6 +20,7 @@ public class UserService {
 
     private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
+    @Transactional
     public void saveUser(User user) {
         try {
             userRepository.save(user);
@@ -27,6 +29,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void saveNewUser(User user) {
         try {
             user.setPassword(encoder.encode(user.getPassword()));
@@ -57,6 +60,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void deleteUser(ObjectId id) {
         try {
             userRepository.deleteById(id);
@@ -65,6 +69,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void deleteUserByUsername(String username) {
         try {
             userRepository.deleteByUsername(username);
