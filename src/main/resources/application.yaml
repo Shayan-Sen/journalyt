@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: journalyt
+  data:
+    mongodb:
+      uri: mongodb+srv://shayan:shayan@cluster0.pb5ex.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      database: journaldb
+      auto-index-creation: true
+
+server:
+  port: 8800
+  servlet:
+    context-path: /journalyt
