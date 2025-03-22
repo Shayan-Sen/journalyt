@@ -8,6 +8,8 @@ import static org.springframework.http.HttpStatus.*;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,23 +34,28 @@ public class JournalEntryController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user/{username}")
-    public ResponseEntity<ApiResponse> getAllJournalEntriesOfUser(@PathVariable String username) {
+    @GetMapping
+    public ResponseEntity<ApiResponse> getAllJournalEntriesOfUser() {
 
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
             User user = userService.findByUsername(username);
             List<JournalEntry> entries = user.getJournalEntries();
 
-            return ResponseEntity.ok(new ApiResponse(entries, "Successfully Retrieved All Journal Entries of " + username));
+            return ResponseEntity
+                    .ok(new ApiResponse(entries, "Successfully Retrieved All Journal Entries of " + username));
         } catch (Exception e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(null, e.getMessage()));
         }
     }
 
-    @GetMapping("/user/{username}/id/{id}")
-    public ResponseEntity<ApiResponse> getJournalEntrybyId(@PathVariable ObjectId id,@PathVariable String username) {
+    @GetMapping("/id/{id}")
+    public ResponseEntity<ApiResponse> getJournalEntrybyId(@PathVariable ObjectId id) {
         try {
-            JournalEntry entry = journalEntryService.getEntryById(id,username);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            JournalEntry entry = journalEntryService.getEntryById(id, username);
 
             return ResponseEntity
                     .ok(new ApiResponse(entry, "Successfully Retrieved Journal Entry"));
@@ -57,10 +64,11 @@ public class JournalEntryController {
         }
     }
 
-    @PostMapping("/user/{username}")
-    public ResponseEntity<ApiResponse> createEntry(@RequestBody JournalEntry journalEntry,
-            @PathVariable String username) {
+    @PostMapping
+    public ResponseEntity<ApiResponse> createEntry(@RequestBody JournalEntry journalEntry) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
             journalEntryService.saveEntry(journalEntry, username);
 
             return ResponseEntity.status(CREATED).body(new ApiResponse(journalEntry, "New Journal Entry Created"));
@@ -69,13 +77,14 @@ public class JournalEntryController {
         }
     }
 
-    @PutMapping("/user/{username}/id/{id}")
+    @PutMapping("/id/{id}")
     public ResponseEntity<ApiResponse> updateEntry(
             @PathVariable ObjectId id,
-            @RequestBody JournalEntry journalEntry,
-            @PathVariable String username) {
+            @RequestBody JournalEntry journalEntry) {
         try {
-            JournalEntry updatedEntry = journalEntryService.updateById(id, journalEntry,username);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+            JournalEntry updatedEntry = journalEntryService.updateById(id, journalEntry, username);
 
             return ResponseEntity.status(ACCEPTED)
                     .body(new ApiResponse(updatedEntry, "Changed Journal Entry with id:" + id));
@@ -84,9 +93,11 @@ public class JournalEntryController {
         }
     }
 
-    @DeleteMapping("/user/{username}/id/{id}")
-    public ResponseEntity<ApiResponse> deleteEntry(@PathVariable ObjectId id, @PathVariable String username) {
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<ApiResponse> deleteEntry(@PathVariable ObjectId id) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
             journalEntryService.deleteEntry(id, username);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {

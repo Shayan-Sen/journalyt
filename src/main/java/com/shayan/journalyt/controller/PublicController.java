@@ -27,7 +27,7 @@ public class PublicController {
     @PostMapping("/create-user")
     public ResponseEntity<ApiResponse> createNewUser(@RequestBody User user) {
         try {
-            userService.saveUser(user);
+            userService.saveNewUser(user);
             return ResponseEntity.status(CREATED).body(new ApiResponse(user, "Created new User"));
         } catch (Exception e) {
             return ResponseEntity.status(BAD_REQUEST)
