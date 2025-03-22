@@ -1,6 +1,5 @@
 package com.shayan.journalyt.service;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -31,7 +30,7 @@ public class UserService {
     public void saveNewUser(User user) {
         try {
             user.setPassword(encoder.encode(user.getPassword()));
-            user.setRoles(Arrays.asList("USER"));
+            user.setRoles(List.of("USER"));
             userRepository.save(user);
         } catch (Exception e) {
             throw new RuntimeException("Failed to save user: " + e.getMessage());
