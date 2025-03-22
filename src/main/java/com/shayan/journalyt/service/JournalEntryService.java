@@ -57,7 +57,7 @@ public class JournalEntryService {
             User user = userService.findByUsername(username);
             JournalEntry journalEntry = journalEntryRepository.findById(id)
                     .orElse(null);
-            JournalEntry entry = user.getJournalEntries().contains(journalEntry)?journalEntry:null;
+            JournalEntry entry = user.getJournalEntries().contains(journalEntry) ? journalEntry : null;
             if (entry != null) {
                 entry.setTitle(updatedEntry.getTitle());
                 entry.setContent(updatedEntry.getContent());
@@ -76,9 +76,11 @@ public class JournalEntryService {
     public void deleteEntry(ObjectId id, String username) {
         try {
             User user = userService.findByUsername(username);
-            user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-            journalEntryRepository.deleteById(id);
-            userService.saveUser(user);
+            boolean ifremoved = user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+            if (ifremoved) {
+                journalEntryRepository.deleteById(id);
+                userService.saveUser(user);
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error deleting entry: " + e.getMessage());
         }
